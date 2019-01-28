@@ -29,7 +29,7 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by = 10
+    paginate_by = 2
     # context_object_name = 'my_book_list'
     # queryset = Book.objects.filter(title__icontains='war')[:5]
     # template_name = 'books/my_arbitrary_name_list.html'
@@ -37,6 +37,12 @@ class BookListView(generic.ListView):
 
 class BookDetailView(generic.DetailView):
     model = Book
+
+
+class AuthorListView(generic.ListView):
+    """Generic class-based list view for a list of authors."""
+    model = Author
+    paginate_by = 2
 
 
 class AuthorDetailView(generic.DetailView):
