@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import permission_required
 from catalog.models import Book, Author, BookInstance, Genre
 from catalog.forms import RenewBookForm
 
@@ -71,7 +72,9 @@ class AuthorDetailView(generic.DetailView):
     model = Author
 
 
+@permission_required('catalog.can_mark_returned')
 def renew_book_librarian(request, pk):
+    """View function for renewing a specific BookInstance by Librarian."""
     book_instance = get_object_or_404(BookInstance, pk=pk)
 
     # If this is a POST request then process the Form data
