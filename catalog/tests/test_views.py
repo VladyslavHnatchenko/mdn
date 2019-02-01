@@ -40,14 +40,13 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
         number_of_book_copies = 30
         for book_copy in range(number_of_book_copies):
             return_date = timezone.now() + datetime.timedelta(days=book_copy % 5)
-            the_borrower = test_user1 if book_copy % 2 else test_user2
+            if book_copy % 2:
+                the_borrower = test_user1
+            else:
+                the_borrower = test_user2
             status = 'm'
-            BookInstance.objects.create(
-                book=test_book,
-                imprint='Unlikely Imprint, 2016',
-                due_back=the_borrower,
-                status=status,
-            )
+            BookInstance.objects.create(book=test_book, imprint='Unlikely Imprint, 2016',
+                                        due_back=return_date, borrower=the_borrower, status=status)
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('my-borrowed'))
@@ -114,7 +113,7 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Confirm that of the items, only 10 are displayed due to pagination.
-        self.assertEqual(len(response.context['bookinstance_list']), 10)
+        self.assertEqual(len(response.context['bookinstance_list']), 15)
 
         last_date = 0
         for book in response.context['bookinstance_list']:
@@ -263,3 +262,12 @@ class RenewBookInstancesViewTest(TestCase):
 
         date_3_weeks_in_future = datetime.date.today() + datetime.timedelta(weeks=3)
         self.assertEqual(response.context['form'].initial['renewal_date'], date_3_weeks_in_future)
+
+    def test_redirects_to_all_borrowed_book_list_on_success(self):
+        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        valid_date_in_future = datetime.date.today() + datetime.timedelta(weeks=2)
+        response = self.client.post(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}),
+                                    {'renewal_date': valid_date_in_future})
+        self.assertRedirects(response, reverse('all-borrowed'))
+
+    
