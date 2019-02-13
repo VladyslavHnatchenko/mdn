@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,41 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# example ORM broker connection
+# ERROR
+# https://stackoverflow.com/questions/35850362/importerror-no-module-named-curses-when-trying-to-import-blessings
+# https://github.com/wong2/pick/issues/15
+# https://django-q.readthedocs.io/en/latest/install.html
+# Q_CLUSTER = {
+#     'name': 'catalog',
+#     'workers': 8,
+#     'recycle': 500,
+#     'timeout': 60,
+#     'compress': True,
+#     'cpu_affinity': 1,
+#     'save_limit': 250,
+#     'queue_limit': 500,
+#     'label': 'Django Q',
+#     'DjangoORM': {
+#         'host': '127.0.0.1',
+#         'port': 8000,
+#         'db': 'db.sqlite3',
+#     }
+# }
+# settings.py example
+Q_CLUSTER = {
+    'name': 'catalog',
+    'workers': 8,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'cpu_affinity': 1,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'label': 'Django Q',
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 8000,
+        'db': 0, }
+}
