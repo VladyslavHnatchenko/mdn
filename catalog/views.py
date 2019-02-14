@@ -47,11 +47,13 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     paginated_by = 2
 
     def get_queryset(self):
-        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+        return BookInstance.objects.filter(borrower=self.request.user).\
+            filter(status__exact='o').order_by('due_back')
 
 
 class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
-    """Generic class-based view listing all books on loan. Only visible to users with can_mark_returned_permissions"""
+    """Generic class-based view listing all books on loan. Only visible
+    to users with can_mark_returned_permissions"""
     model = BookInstance
     permission_required = 'catalog.can_mark_returned'
     template_name = 'catalog/bookinstance_list_borrowed_all.html'
@@ -94,7 +96,8 @@ def renew_book_librarian(request, pk):
 
         # Check if the form is valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+            # process the data in form.cleaned_data as required (here we just
+            # write it to the model due_back field)
             book_instance.due_back = form.cleaned_data['renewal_date']
             book_instance.save()
 

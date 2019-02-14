@@ -5,7 +5,8 @@ from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User  # Required to assign User as borrower
-from django.contrib.auth.models import Permission  # Required to grant the permission needed to set a book as returned.
+from django.contrib.auth.models import Permission  # Required to grant the permission
+# needed to set a book as returned.
 from catalog.models import Author
 from catalog.models import BookInstance, Book, Genre, Language
 
@@ -157,7 +158,7 @@ class AuthorListViewTest(TestCase):
         response = self.client.get(reverse('authors'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertTrue(response.context['is_paginated'] is True)
         self.assertTrue(len(response.context['author_list']) == 2)
 
     def test_lists_all_authors(self):

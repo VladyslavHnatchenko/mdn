@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class RenewBookForm(forms.Form):
-    renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
+    renewal_date = forms.DateField(help_text="Enter a date between now and"
+                                             " 4 weeks (default 3).")
 
     def clean_renewal_date(self):
         data = self.cleaned_data['renewal_date']
@@ -17,7 +18,8 @@ class RenewBookForm(forms.Form):
 
         # Check if a date is in the allowed range (+4 weeks from today).
         if data > datetime.date.today() + datetime.timedelta(weeks=4):
-            raise ValidationError(_('Invalid date - renewal more than 4 weeks ahead'))
+            raise ValidationError(_('Invalid date - renewal more than 4 weeks '
+                                    'ahead'))
 
         # Remember to always return the cleaned data.
         return data
