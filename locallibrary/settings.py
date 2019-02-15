@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog',
-    'django_q',
+    # 'django_q',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +129,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+#
+# NOSE_ARGS = ['--with-spec', '--spec-color',
+#              '--with-coverage', '--cover-html',
+#              '--cover-package=catalog', '--cover-html-dir=reports/cover']
 
 # example ORM broker connection
 # ERROR
